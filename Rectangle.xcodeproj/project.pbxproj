@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00A2A06886A71063BE2B331B /* CustomSnapTargetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9237C70DF06F54C0F46F7EAA /* CustomSnapTargetTests.swift */; };
 		12D896200936C0DE9FF41FB4 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		14339F0CE6CF7A9D96A863CC /* ProFeaturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B8899E2BAF93044DF43F9D /* ProFeaturesViewController.swift */; };
 		264E67A60B9494E1B3C20C7B /* HyperKeyManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B29128179164FC1E9FEB323 /* HyperKeyManagerTests.swift */; };
 		30166BD024F27D6A00A38608 /* SpecifiedCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30166BCF24F27D6A00A38608 /* SpecifiedCalculation.swift */; };
 		32348AE6C9EEB439EF683FAA /* CustomSizeCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961DDB0464554964CA1175E8 /* CustomSizeCalculation.swift */; };
@@ -196,6 +197,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		17B8899E2BAF93044DF43F9D /* ProFeaturesViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProFeaturesViewController.swift; sourceTree = "<group>"; };
 		1CCE6629F1E43F1AAEB05463 /* CustomSizeCalculationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CustomSizeCalculationTests.swift; sourceTree = "<group>"; };
 		27A3ADD51612E70938D3FEF2 /* CustomSnapCalculation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CustomSnapCalculation.swift; sourceTree = "<group>"; };
 		2EDD19B67C38002E14436089 /* MoveAllToDisplayTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MoveAllToDisplayTests.swift; sourceTree = "<group>"; };
@@ -671,6 +673,7 @@
 				98910B3D231130AF0066EC23 /* SettingsViewController.swift */,
 				983DD03F28A844BE00BF1EEE /* SnapAreaViewController.swift */,
 				98C97FFC25893B040061F01F /* Config.swift */,
+				17B8899E2BAF93044DF43F9D /* ProFeaturesViewController.swift */,
 			);
 			path = PrefsWindow;
 			sourceTree = "<group>";
@@ -1067,6 +1070,7 @@
 				A840B8B321ED68515DFD8EB1 /* CustomSizeManager.swift in Sources */,
 				72412C84D8D9A022C9AA0A4A /* SpaceManager.swift in Sources */,
 				E546DD044FC44D828C70BDE3 /* HyperKeyManager.swift in Sources */,
+				14339F0CE6CF7A9D96A863CC /* ProFeaturesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

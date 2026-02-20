@@ -140,6 +140,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.initializeTodo()
         // Pro: enable Hyper Key if configured
         hyperKeyManager.enable()
+        // Pro: observe toggle from Preferences
+        Notification.Name.hyperKeyToggled.onPost { [weak self] notification in
+            guard let self = self else { return }
+            if let enabled = notification.object as? Bool, enabled {
+                self.hyperKeyManager.enable()
+            } else {
+                self.hyperKeyManager.disable()
+            }
+        }
         checkForProblematicApps()
         MacTilingDefaults.checkForBuiltInTiling(skipIfAlreadyNotified: true)
     }
@@ -244,9 +253,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func openPreferences(_ sender: Any) {
         if prefsWindowController == nil {
             prefsWindowController = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "PrefsWindowController") as? NSWindowController
+            addProFeaturesTab()
         }
         NSApp.activate(ignoringOtherApps: true)
         prefsWindowController?.showWindow(self)
+    }
+
+    private func addProFeaturesTab() {
+        guard let tabVC = prefsWindowController?.contentViewController as? NSTabViewController else { return }
+        let proVC = ProFeaturesViewController()
+        let tabItem = NSTabViewItem(viewController: proVC)
+        tabItem.label = "Pro"
+        if #available(macOS 11.0, *) {
+            tabItem.image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: "Pro Features")
+        } else {
+            tabItem.image = NSImage(named: NSImage.Name("NSAdvanced"))
+        }
+        tabVC.addTabViewItem(tabItem)
     }
     
     @IBAction func showAbout(_ sender: Any) {
