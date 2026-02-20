@@ -104,7 +104,24 @@ enum WindowAction: Int, Codable {
          middleVerticalThird = 88,
          bottomVerticalThird = 89,
          topVerticalTwoThirds = 90,
-         bottomVerticalTwoThirds = 91
+         bottomVerticalTwoThirds = 91,
+         // Pro features
+         nextSpace = 92,
+         previousSpace = 93,
+         moveAllToNextDisplay = 94,
+         moveAllToPreviousDisplay = 95,
+         saveArrangement = 96,
+         restoreArrangement = 97,
+         customSize1 = 98,
+         customSize2 = 99,
+         customSize3 = 100,
+         customSize4 = 101,
+         customSize5 = 102,
+         customSnap1 = 103,
+         customSnap2 = 104,
+         customSnap3 = 105,
+         customSnap4 = 106,
+         customSnap5 = 107
 
     // Order matters here - it's used in the menu
     static let active = [leftHalf, rightHalf, centerHalf, topHalf, bottomHalf,
@@ -128,7 +145,12 @@ enum WindowAction: Int, Codable {
                          halveHeightUp, halveHeightDown, halveWidthLeft, halveWidthRight,
                          tileAll, cascadeAll,
                          leftTodo, rightTodo,
-                         cascadeActiveApp, tileActiveApp
+                         cascadeActiveApp, tileActiveApp,
+                         // Pro features
+                         nextSpace, previousSpace,
+                         moveAllToNextDisplay, moveAllToPreviousDisplay,
+                         saveArrangement, restoreArrangement,
+                         customSize1, customSize2, customSize3, customSize4, customSize5
     ]
 
     func post() {
@@ -251,6 +273,23 @@ enum WindowAction: Int, Codable {
         case .bottomVerticalThird: return "bottomVerticalThird"
         case .topVerticalTwoThirds: return "topVerticalTwoThirds"
         case .bottomVerticalTwoThirds: return "bottomVerticalTwoThirds"
+        // Pro features
+        case .nextSpace: return "nextSpace"
+        case .previousSpace: return "previousSpace"
+        case .moveAllToNextDisplay: return "moveAllToNextDisplay"
+        case .moveAllToPreviousDisplay: return "moveAllToPreviousDisplay"
+        case .saveArrangement: return "saveArrangement"
+        case .restoreArrangement: return "restoreArrangement"
+        case .customSize1: return "customSize1"
+        case .customSize2: return "customSize2"
+        case .customSize3: return "customSize3"
+        case .customSize4: return "customSize4"
+        case .customSize5: return "customSize5"
+        case .customSnap1: return "customSnap1"
+        case .customSnap2: return "customSnap2"
+        case .customSnap3: return "customSnap3"
+        case .customSnap4: return "customSnap4"
+        case .customSnap5: return "customSnap5"
         }
     }
 
@@ -397,6 +436,31 @@ enum WindowAction: Int, Codable {
             return nil
         case .topVerticalThird, .middleVerticalThird, .bottomVerticalThird, .topVerticalTwoThirds, .bottomVerticalTwoThirds:
             return nil
+        // Pro features
+        case .nextSpace:
+            key = "pro.nextSpace.title"; value = "Next Space"
+        case .previousSpace:
+            key = "pro.previousSpace.title"; value = "Previous Space"
+        case .moveAllToNextDisplay:
+            key = "pro.moveAllToNextDisplay.title"; value = "Move All to Next Display"
+        case .moveAllToPreviousDisplay:
+            key = "pro.moveAllToPreviousDisplay.title"; value = "Move All to Prev Display"
+        case .saveArrangement:
+            key = "pro.saveArrangement.title"; value = "Save Arrangement"
+        case .restoreArrangement:
+            key = "pro.restoreArrangement.title"; value = "Restore Arrangement"
+        case .customSize1:
+            key = "pro.customSize1.title"; value = "Custom Size 1"
+        case .customSize2:
+            key = "pro.customSize2.title"; value = "Custom Size 2"
+        case .customSize3:
+            key = "pro.customSize3.title"; value = "Custom Size 3"
+        case .customSize4:
+            key = "pro.customSize4.title"; value = "Custom Size 4"
+        case .customSize5:
+            key = "pro.customSize5.title"; value = "Custom Size 5"
+        case .customSnap1, .customSnap2, .customSnap3, .customSnap4, .customSnap5:
+            return nil
         }
 
         return NSLocalizedString(key, tableName: "Main", value: value, comment: "")
@@ -431,10 +495,25 @@ enum WindowAction: Int, Codable {
             // Corner thirds
             .topLeftThird, .topRightThird, .bottomLeftThird, .bottomRightThird,
             // Eighths
-            .topLeftEighth, .topCenterLeftEighth, .topCenterRightEighth, .topRightEighth, .bottomLeftEighth, .bottomCenterLeftEighth, .bottomCenterRightEighth, .bottomRightEighth:
+            .topLeftEighth, .topCenterLeftEighth, .topCenterRightEighth, .topRightEighth, .bottomLeftEighth, .bottomCenterLeftEighth, .bottomCenterRightEighth, .bottomRightEighth,
+            // Pro non-drag features
+            .nextSpace, .previousSpace,
+            .moveAllToNextDisplay, .moveAllToPreviousDisplay,
+            .saveArrangement, .restoreArrangement,
+            .customSize1, .customSize2, .customSize3, .customSize4, .customSize5:
             return false
         default:
             return true
+        }
+    }
+
+    var proDefault: Shortcut? {
+        switch self {
+        case .nextSpace: return Shortcut(ctrl|alt|cmd|shift, kVK_RightArrow)
+        case .previousSpace: return Shortcut(ctrl|alt|cmd|shift, kVK_LeftArrow)
+        case .moveAllToNextDisplay: return Shortcut(ctrl|alt|cmd|shift, kVK_ANSI_N)
+        case .moveAllToPreviousDisplay: return Shortcut(ctrl|alt|cmd|shift, kVK_ANSI_P)
+        default: return nil
         }
     }
 
@@ -583,6 +662,13 @@ enum WindowAction: Int, Codable {
         case .bottomVerticalThird: return NSImage(imageLiteralResourceName: "bottomThirdTemplate")
         case .topVerticalTwoThirds: return NSImage(imageLiteralResourceName: "topTwoThirdsTemplate")
         case .bottomVerticalTwoThirds: return NSImage(imageLiteralResourceName: "bottomTwoThirdsTemplate")
+        // Pro features
+        case .nextSpace, .previousSpace,
+             .moveAllToNextDisplay, .moveAllToPreviousDisplay,
+             .saveArrangement, .restoreArrangement,
+             .customSize1, .customSize2, .customSize3, .customSize4, .customSize5,
+             .customSnap1, .customSnap2, .customSnap3, .customSnap4, .customSnap5:
+            return NSImage()
         }
     }
 
@@ -627,6 +713,15 @@ enum WindowAction: Int, Codable {
         case .maximizeHeight:
             return Defaults.applyGapsToMaximizeHeight.userDisabled ? .none : .vertical;
         case .almostMaximize, .previousDisplay, .nextDisplay, .larger, .smaller, .largerWidth, .smallerWidth, .largerHeight, .smallerHeight, .center, .centerProminently, .restore, .specified, .reverseAll, .tileAll, .cascadeAll, .cascadeActiveApp, .tileActiveApp:
+            return .none
+        // Pro features
+        case .customSize1, .customSize2, .customSize3, .customSize4, .customSize5:
+            return .both
+        case .customSnap1, .customSnap2, .customSnap3, .customSnap4, .customSnap5:
+            return .both
+        case .nextSpace, .previousSpace,
+             .moveAllToNextDisplay, .moveAllToPreviousDisplay,
+             .saveArrangement, .restoreArrangement:
             return .none
         }
     }

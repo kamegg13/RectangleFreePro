@@ -183,6 +183,18 @@ class WindowCalculationFactory {
     static let bottomCenterRightEighthCalculation = BottomCenterRightEighthCalculation()
     static let bottomRightEighthCalculation = BottomRightEighthCalculation()
     static let specifiedCalculation = SpecifiedCalculation()
+    // Pro: custom sizes (5 slots)
+    static let customSizeCalculation1 = CustomSizeCalculation(index: 0)
+    static let customSizeCalculation2 = CustomSizeCalculation(index: 1)
+    static let customSizeCalculation3 = CustomSizeCalculation(index: 2)
+    static let customSizeCalculation4 = CustomSizeCalculation(index: 3)
+    static let customSizeCalculation5 = CustomSizeCalculation(index: 4)
+    // Pro: custom snap targets (5 slots)
+    static let customSnapCalculation1 = CustomSnapCalculation(index: 0)
+    static let customSnapCalculation2 = CustomSnapCalculation(index: 1)
+    static let customSnapCalculation3 = CustomSnapCalculation(index: 2)
+    static let customSnapCalculation4 = CustomSnapCalculation(index: 3)
+    static let customSnapCalculation5 = CustomSnapCalculation(index: 4)
     static let leftTodoCalculation = LeftTodoCalculation()
     static let rightTodoCalculation = RightTodoCalculation()
     static let bottomVerticalTwoThirdsCalculation = BottomVerticalTwoThirdsCalculation()
@@ -267,6 +279,18 @@ class WindowCalculationFactory {
      .doubleWidthLeft: halfOrDoubleDimensionCalculation,
      .doubleWidthRight: halfOrDoubleDimensionCalculation,
      .specified: specifiedCalculation,
+     // Pro: custom sizes
+     .customSize1: customSizeCalculation1,
+     .customSize2: customSizeCalculation2,
+     .customSize3: customSizeCalculation3,
+     .customSize4: customSizeCalculation4,
+     .customSize5: customSizeCalculation5,
+     // Pro: custom snaps
+     .customSnap1: customSnapCalculation1,
+     .customSnap2: customSnapCalculation2,
+     .customSnap3: customSnapCalculation3,
+     .customSnap4: customSnapCalculation4,
+     .customSnap5: customSnapCalculation5,
      .leftTodo: leftTodoCalculation,
      .rightTodo: rightTodoCalculation,
      .topVerticalThird: topVerticalThirdCalculation,
