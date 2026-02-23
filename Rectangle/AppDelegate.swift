@@ -253,23 +253,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func openPreferences(_ sender: Any) {
         if prefsWindowController == nil {
             prefsWindowController = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "PrefsWindowController") as? NSWindowController
-            addProFeaturesTab()
         }
         NSApp.activate(ignoringOtherApps: true)
         prefsWindowController?.showWindow(self)
-    }
-
-    private func addProFeaturesTab() {
-        guard let tabVC = prefsWindowController?.contentViewController as? NSTabViewController else { return }
-        let proVC = ProFeaturesViewController()
-        let tabItem = NSTabViewItem(viewController: proVC)
-        tabItem.label = "Pro"
-        if #available(macOS 11.0, *) {
-            tabItem.image = NSImage(systemSymbolName: "star.fill", accessibilityDescription: "Pro Features")
-        } else {
-            tabItem.image = NSImage(named: NSImage.Name("NSAdvanced"))
-        }
-        tabVC.addTabViewItem(tabItem)
     }
     
     @IBAction func showAbout(_ sender: Any) {
