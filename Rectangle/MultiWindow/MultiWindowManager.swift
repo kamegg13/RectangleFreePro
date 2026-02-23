@@ -28,6 +28,30 @@ class MultiWindowManager {
         case .tileActiveApp:
             tileActiveAppWindowsOnScreen(windowElement: parameters.windowElement)
             return true
+        case .moveAllToNextDisplay:
+            moveAllWindowsToDisplay(direction: true, windowElement: parameters.windowElement)
+            return true
+        case .moveAllToPreviousDisplay:
+            moveAllWindowsToDisplay(direction: false, windowElement: parameters.windowElement)
+            return true
+        case .saveArrangement:
+            try? ArrangementManager.save(name: "default")
+            return true
+        case .restoreArrangement:
+            try? ArrangementManager.restore(name: "default")
+            return true
+        case .nextSpace:
+            if let windowElement = parameters.windowElement ?? AccessibilityElement.getFrontWindowElement(),
+               let windowId = parameters.windowId ?? windowElement.getWindowId() {
+                SpaceManager.moveWindow(windowId: windowId, direction: +1)
+            }
+            return true
+        case .previousSpace:
+            if let windowElement = parameters.windowElement ?? AccessibilityElement.getFrontWindowElement(),
+               let windowId = parameters.windowId ?? windowElement.getWindowId() {
+                SpaceManager.moveWindow(windowId: windowId, direction: -1)
+            }
+            return true
         default:
             return false
         }
@@ -188,6 +212,16 @@ class MultiWindowManager {
 
         w.setFrame(rect)
         w.bringToFront()
+    }
+
+    static func moveAllWindowsToDisplay(direction: Bool, windowElement: AccessibilityElement? = nil) {
+        guard let (_, windows) = allWindowsOnScreen(windowElement: windowElement) else { return }
+        let action: WindowAction = direction ? .nextDisplay : .previousDisplay
+        for w in windows {
+            let windowId = w.getWindowId()
+            let params = ExecutionParameters(action, windowElement: w, windowId: windowId)
+            NotificationCenter.default.post(name: action.notificationName, object: params)
+        }
     }
 
     static func tileActiveAppWindowsOnScreen(windowElement: AccessibilityElement? = nil) {

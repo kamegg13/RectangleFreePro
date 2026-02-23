@@ -96,7 +96,12 @@ class Defaults {
     static let systemWideMouseDownApps = JSONDefault<Set<String>>(key:"systemWideMouseDownApps", defaultValue: Set<String>(["org.languagetool.desktop", "com.microsoft.teams2"]))
     static let internalTilingNotified = BoolDefault(key: "internalTilingNotified")
     static let screensOrderedByX = OptionalBoolDefault(key: "screensOrderedByX")
-    
+    // Pro features
+    static let customSizes = JSONDefault<[CustomWindowSize]>(key: "customSizes")
+    static let customSnapTargets = JSONDefault<[CustomSnapTarget]>(key: "customSnapTargets")
+    static let hiddenMenuActions = JSONDefault<[String]>(key: "hiddenMenuActions")
+    static let hyperKeyEnabled = BoolDefault(key: "hyperKeyEnabled")
+
     static var array: [Default] = [
         launchOnLogin,
         disabledApps,

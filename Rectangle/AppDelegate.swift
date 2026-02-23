@@ -32,6 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var windowCalculationFactory: WindowCalculationFactory!
     private var snappingManager: SnappingManager!
     private var titleBarManager: TitleBarManager!
+    private let hyperKeyManager = HyperKeyManager()
     
     private var prefsWindowController: NSWindowController?
     
@@ -137,6 +138,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.snappingManager = SnappingManager()
         self.titleBarManager = TitleBarManager()
         self.initializeTodo()
+        // Pro: enable Hyper Key if configured
+        hyperKeyManager.enable()
+        // Pro: observe toggle from Preferences
+        Notification.Name.hyperKeyToggled.onPost { [weak self] notification in
+            guard let self = self else { return }
+            if let enabled = notification.object as? Bool, enabled {
+                self.hyperKeyManager.enable()
+            } else {
+                self.hyperKeyManager.disable()
+            }
+        }
         checkForProblematicApps()
         MacTilingDefaults.checkForBuiltInTiling(skipIfAlreadyNotified: true)
     }
@@ -381,6 +393,8 @@ extension AppDelegate: NSMenuDelegate {
         var categoryMenus: [CategoryMenu] = []
         for action in WindowAction.active {
             guard let displayName = action.displayName else { continue }
+            // Pro: skip hidden actions
+            if MenuCustomizationManager.isHidden(action) { continue }
             let newMenuItem = NSMenuItem(title: displayName, action: #selector(executeMenuWindowAction), keyEquivalent: "")
             newMenuItem.representedObject = action
 
@@ -416,11 +430,24 @@ extension AppDelegate: NSMenuDelegate {
         }
         
         mainStatusMenu.insertItem(NSMenuItem.separator(), at: menuIndex)
-
         menuIndex += 1
+
+        // Pro: Customize Menu item
+        let customizeItem = NSMenuItem(title: "Customize Menu…", action: #selector(openMenuCustomization), keyEquivalent: "")
+        mainStatusMenu.insertItem(customizeItem, at: menuIndex)
+        menuIndex += 1
+
+        mainStatusMenu.insertItem(NSMenuItem.separator(), at: menuIndex)
+        menuIndex += 1
+
         addTodoModeMenuItems(startingIndex: menuIndex)
     }
-    
+
+    @objc func openMenuCustomization() {
+        // Opens preferences to the menu customization section
+        openPreferences(self)
+    }
+
     struct CategoryMenu {
         let menu: NSMenu
         let category: WindowActionCategory

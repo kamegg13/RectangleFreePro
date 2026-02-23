@@ -22,6 +22,8 @@ extension Notification.Name {
     static let windowTitleBar = Notification.Name("windowTitleBar")
     static let defaultSnapAreas = Notification.Name("defaultSnapAreas")
     static let updateAvailability = Notification.Name("updateAvailability")
+    // Pro features
+    static let hyperKeyToggled = Notification.Name("hyperKeyToggled")
 
     func post(
         center: NotificationCenter = NotificationCenter.default,

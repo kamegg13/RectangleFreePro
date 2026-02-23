@@ -394,11 +394,16 @@ class SnappingManager {
     
     func snapAreaContainingCursor(priorSnapArea: SnapArea?) -> SnapArea? {
         let loc = NSEvent.mouseLocation
-        
+
+        // Pro: check custom snap targets first
+        if let customSnap = customSnapAreaContainingCursor(loc: loc) {
+            return customSnap
+        }
+
         for screen in NSScreen.screens {
             guard let directional = directionalLocationOfCursor(loc: loc, screen: screen)
             else { continue }
-            
+
             if let windowId = windowId, Defaults.todo.userEnabled && Defaults.todoMode.enabled && TodoManager.isTodoWindow(windowId) {
                 if Defaults.todoSidebarSide.value == .left && directional == .l {
                     return SnapArea(screen: screen, directional: directional, action: .leftTodo)
@@ -407,11 +412,11 @@ class SnappingManager {
                     return SnapArea(screen: screen, directional: directional, action: .rightTodo)
                 }
             }
-            
+
             let config = screen.frame.isLandscape
             ? SnapAreaModel.instance.landscape[directional]
             : SnapAreaModel.instance.portrait[directional]
-            
+
             if let action = config?.action {
                 return SnapArea(screen: screen, directional: directional, action: action)
             }
@@ -419,7 +424,23 @@ class SnappingManager {
                 return compound.calculation.snapArea(cursorLocation: loc, screen: screen, directional: directional, priorSnapArea: priorSnapArea)
             }
         }
-        
+
+        return nil
+    }
+
+    private func customSnapAreaContainingCursor(loc: CGPoint) -> SnapArea? {
+        guard let targets = Defaults.customSnapTargets.typedValue, !targets.isEmpty else { return nil }
+
+        let customActions: [WindowAction] = [.customSnap1, .customSnap2, .customSnap3, .customSnap4, .customSnap5]
+
+        for screen in NSScreen.screens {
+            let screenFrame = screen.frame
+            for (idx, target) in targets.prefix(5).enumerated() {
+                if target.triggerZone.contains(point: loc, screen: screenFrame) {
+                    return SnapArea(screen: screen, directional: .c, action: customActions[idx])
+                }
+            }
+        }
         return nil
     }
     
