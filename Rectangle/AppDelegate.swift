@@ -32,7 +32,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var windowCalculationFactory: WindowCalculationFactory!
     private var snappingManager: SnappingManager!
     private var titleBarManager: TitleBarManager!
-    
+    private let hyperKeyManager = HyperKeyManager()
+    /// Optional secondary status item showing the active workspace name (e.g. "[1]")
+    private var workspaceStatusItem: NSStatusItem?
+
     private var prefsWindowController: NSWindowController?
     
     private var prevActiveAppObservation: NSKeyValueObservation?
@@ -47,6 +50,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     static var instance: AppDelegate {
         NSApp.delegate as! AppDelegate
+    }
+
+    static var windowManager: WindowManager {
+        instance.windowManager
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -137,6 +144,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.snappingManager = SnappingManager()
         self.titleBarManager = TitleBarManager()
         self.initializeTodo()
+        // Pro: enable Hyper Key if configured
+        hyperKeyManager.enable()
+        // Pro: observe toggle from Preferences
+        Notification.Name.hyperKeyToggled.onPost { [weak self] notification in
+            guard let self = self else { return }
+            if let enabled = notification.object as? Bool, enabled {
+                self.hyperKeyManager.enable()
+            } else {
+                self.hyperKeyManager.disable()
+            }
+        }
+        // Pro: initialize Workspaces
+        WorkspaceManager.shared.initialize()
+        WindowObserver.shared.startObserving()
+        // Update workspace indicator when switching
+        Notification.Name.workspaceSwitched.onPost { [weak self] notification in
+            guard let id = notification.object as? String else { return }
+            self?.updateWorkspaceStatusItem(workspaceId: id)
+        }
+        updateWorkspaceStatusItem(workspaceId: WorkspaceManager.shared.activeWorkspaceId)
         checkForProblematicApps()
         MacTilingDefaults.checkForBuiltInTiling(skipIfAlreadyNotified: true)
     }
@@ -381,6 +408,8 @@ extension AppDelegate: NSMenuDelegate {
         var categoryMenus: [CategoryMenu] = []
         for action in WindowAction.active {
             guard let displayName = action.displayName else { continue }
+            // Pro: skip hidden actions
+            if MenuCustomizationManager.isHidden(action) { continue }
             let newMenuItem = NSMenuItem(title: displayName, action: #selector(executeMenuWindowAction), keyEquivalent: "")
             newMenuItem.representedObject = action
 
@@ -416,11 +445,35 @@ extension AppDelegate: NSMenuDelegate {
         }
         
         mainStatusMenu.insertItem(NSMenuItem.separator(), at: menuIndex)
-
         menuIndex += 1
+
+        // Pro: Customize Menu item
+        let customizeItem = NSMenuItem(title: "Customize Menu…", action: #selector(openMenuCustomization), keyEquivalent: "")
+        mainStatusMenu.insertItem(customizeItem, at: menuIndex)
+        menuIndex += 1
+
+        mainStatusMenu.insertItem(NSMenuItem.separator(), at: menuIndex)
+        menuIndex += 1
+
         addTodoModeMenuItems(startingIndex: menuIndex)
     }
-    
+
+    @objc func openMenuCustomization() {
+        // Opens preferences to the menu customization section
+        openPreferences(self)
+    }
+
+    // MARK: - Workspace status indicator
+
+    func updateWorkspaceStatusItem(workspaceId: String) {
+        guard let ws = WorkspaceManager.shared.workspace(withId: workspaceId) else { return }
+        if workspaceStatusItem == nil {
+            workspaceStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        }
+        workspaceStatusItem?.button?.title = "[\(ws.name)]"
+        workspaceStatusItem?.button?.toolTip = "Workspace: \(ws.name)"
+    }
+
     struct CategoryMenu {
         let menu: NSMenu
         let category: WindowActionCategory

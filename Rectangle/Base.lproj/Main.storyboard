@@ -2662,6 +2662,7 @@
                         <tabViewItem label="Shortcuts" image="keyboardToolbarTemplate" id="uw2-9W-2jq"/>
                         <tabViewItem label="Snap Areas" image="snapAreaTemplate" id="Fap-R2-Aj6"/>
                         <tabViewItem label="General" image="toolbarSettingsTemplate" id="gtf-PD-IHm"/>
+                        <tabViewItem label="Pro" id="PRO-tb-itm"/>
                     </tabViewItems>
                     <viewControllerTransitionOptions key="transitionOptions" allowUserInteraction="YES"/>
                     <tabView key="tabView" type="noTabsNoBorder" id="Tya-24-HNL">
@@ -2677,6 +2678,7 @@
                         <segue destination="zlF-FD-XEr" kind="relationship" relationship="tabItems" id="Q5z-Um-3xn"/>
                         <segue destination="t2d-Q7-RLy" kind="relationship" relationship="tabItems" id="Tnv-BY-sch"/>
                         <segue destination="yhc-gS-h02" kind="relationship" relationship="tabItems" id="LMQ-qb-ja6"/>
+                        <segue destination="PRO-vc-001" kind="relationship" relationship="tabItems" id="PRO-sg-001"/>
                     </connections>
                 </tabViewController>
                 <customObject id="CxR-5G-Y25" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -4500,6 +4502,20 @@ DQ
                 <customObject id="bNa-zL-IZp" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-204" y="1379"/>
+        </scene>
+
+        <!--Pro Features View Controller-->
+        <scene sceneID="PRO-sc-001">
+            <objects>
+                <viewController storyboardIdentifier="ProFeaturesViewController" id="PRO-vc-001" customClass="ProFeaturesViewController" customModule="Rectangle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="PRO-vw-001">
+                        <rect key="frame" x="0.0" y="0.0" width="520" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    </view>
+                </viewController>
+                <customObject id="PRO-fr-001" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="200" y="2200"/>
         </scene>
     </scenes>
     <resources>

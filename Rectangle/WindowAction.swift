@@ -104,7 +104,44 @@ enum WindowAction: Int, Codable {
          middleVerticalThird = 88,
          bottomVerticalThird = 89,
          topVerticalTwoThirds = 90,
-         bottomVerticalTwoThirds = 91
+         bottomVerticalTwoThirds = 91,
+         // Pro features
+         nextSpace = 92,
+         previousSpace = 93,
+         moveAllToNextDisplay = 94,
+         moveAllToPreviousDisplay = 95,
+         saveArrangement = 96,
+         restoreArrangement = 97,
+         customSize1 = 98,
+         customSize2 = 99,
+         customSize3 = 100,
+         customSize4 = 101,
+         customSize5 = 102,
+         customSnap1 = 103,
+         customSnap2 = 104,
+         customSnap3 = 105,
+         customSnap4 = 106,
+         customSnap5 = 107,
+         // Workspaces: switch to workspace 1–9
+         switchWorkspace1 = 108,
+         switchWorkspace2 = 109,
+         switchWorkspace3 = 110,
+         switchWorkspace4 = 111,
+         switchWorkspace5 = 112,
+         switchWorkspace6 = 113,
+         switchWorkspace7 = 114,
+         switchWorkspace8 = 115,
+         switchWorkspace9 = 116,
+         // Workspaces: move focused window to workspace 1–9
+         moveWindowToWorkspace1 = 117,
+         moveWindowToWorkspace2 = 118,
+         moveWindowToWorkspace3 = 119,
+         moveWindowToWorkspace4 = 120,
+         moveWindowToWorkspace5 = 121,
+         moveWindowToWorkspace6 = 122,
+         moveWindowToWorkspace7 = 123,
+         moveWindowToWorkspace8 = 124,
+         moveWindowToWorkspace9 = 125
 
     // Order matters here - it's used in the menu
     static let active = [leftHalf, rightHalf, centerHalf, topHalf, bottomHalf,
@@ -128,7 +165,12 @@ enum WindowAction: Int, Codable {
                          halveHeightUp, halveHeightDown, halveWidthLeft, halveWidthRight,
                          tileAll, cascadeAll,
                          leftTodo, rightTodo,
-                         cascadeActiveApp, tileActiveApp
+                         cascadeActiveApp, tileActiveApp,
+                         // Pro features
+                         nextSpace, previousSpace,
+                         moveAllToNextDisplay, moveAllToPreviousDisplay,
+                         saveArrangement, restoreArrangement,
+                         customSize1, customSize2, customSize3, customSize4, customSize5
     ]
 
     func post() {
@@ -251,6 +293,42 @@ enum WindowAction: Int, Codable {
         case .bottomVerticalThird: return "bottomVerticalThird"
         case .topVerticalTwoThirds: return "topVerticalTwoThirds"
         case .bottomVerticalTwoThirds: return "bottomVerticalTwoThirds"
+        // Pro features
+        case .nextSpace: return "nextSpace"
+        case .previousSpace: return "previousSpace"
+        case .moveAllToNextDisplay: return "moveAllToNextDisplay"
+        case .moveAllToPreviousDisplay: return "moveAllToPreviousDisplay"
+        case .saveArrangement: return "saveArrangement"
+        case .restoreArrangement: return "restoreArrangement"
+        case .customSize1: return "customSize1"
+        case .customSize2: return "customSize2"
+        case .customSize3: return "customSize3"
+        case .customSize4: return "customSize4"
+        case .customSize5: return "customSize5"
+        case .customSnap1: return "customSnap1"
+        case .customSnap2: return "customSnap2"
+        case .customSnap3: return "customSnap3"
+        case .customSnap4: return "customSnap4"
+        case .customSnap5: return "customSnap5"
+        // Workspaces
+        case .switchWorkspace1: return "switchWorkspace1"
+        case .switchWorkspace2: return "switchWorkspace2"
+        case .switchWorkspace3: return "switchWorkspace3"
+        case .switchWorkspace4: return "switchWorkspace4"
+        case .switchWorkspace5: return "switchWorkspace5"
+        case .switchWorkspace6: return "switchWorkspace6"
+        case .switchWorkspace7: return "switchWorkspace7"
+        case .switchWorkspace8: return "switchWorkspace8"
+        case .switchWorkspace9: return "switchWorkspace9"
+        case .moveWindowToWorkspace1: return "moveWindowToWorkspace1"
+        case .moveWindowToWorkspace2: return "moveWindowToWorkspace2"
+        case .moveWindowToWorkspace3: return "moveWindowToWorkspace3"
+        case .moveWindowToWorkspace4: return "moveWindowToWorkspace4"
+        case .moveWindowToWorkspace5: return "moveWindowToWorkspace5"
+        case .moveWindowToWorkspace6: return "moveWindowToWorkspace6"
+        case .moveWindowToWorkspace7: return "moveWindowToWorkspace7"
+        case .moveWindowToWorkspace8: return "moveWindowToWorkspace8"
+        case .moveWindowToWorkspace9: return "moveWindowToWorkspace9"
         }
     }
 
@@ -397,6 +475,68 @@ enum WindowAction: Int, Codable {
             return nil
         case .topVerticalThird, .middleVerticalThird, .bottomVerticalThird, .topVerticalTwoThirds, .bottomVerticalTwoThirds:
             return nil
+        // Pro features
+        case .nextSpace:
+            key = "pro.nextSpace.title"; value = "Next Space"
+        case .previousSpace:
+            key = "pro.previousSpace.title"; value = "Previous Space"
+        case .moveAllToNextDisplay:
+            key = "pro.moveAllToNextDisplay.title"; value = "Move All to Next Display"
+        case .moveAllToPreviousDisplay:
+            key = "pro.moveAllToPreviousDisplay.title"; value = "Move All to Prev Display"
+        case .saveArrangement:
+            key = "pro.saveArrangement.title"; value = "Save Arrangement"
+        case .restoreArrangement:
+            key = "pro.restoreArrangement.title"; value = "Restore Arrangement"
+        case .customSize1:
+            key = "pro.customSize1.title"; value = "Custom Size 1"
+        case .customSize2:
+            key = "pro.customSize2.title"; value = "Custom Size 2"
+        case .customSize3:
+            key = "pro.customSize3.title"; value = "Custom Size 3"
+        case .customSize4:
+            key = "pro.customSize4.title"; value = "Custom Size 4"
+        case .customSize5:
+            key = "pro.customSize5.title"; value = "Custom Size 5"
+        case .customSnap1, .customSnap2, .customSnap3, .customSnap4, .customSnap5:
+            return nil
+        // Workspaces
+        case .switchWorkspace1:
+            key = "pro.switchWorkspace1.title"; value = "Switch to Workspace 1"
+        case .switchWorkspace2:
+            key = "pro.switchWorkspace2.title"; value = "Switch to Workspace 2"
+        case .switchWorkspace3:
+            key = "pro.switchWorkspace3.title"; value = "Switch to Workspace 3"
+        case .switchWorkspace4:
+            key = "pro.switchWorkspace4.title"; value = "Switch to Workspace 4"
+        case .switchWorkspace5:
+            key = "pro.switchWorkspace5.title"; value = "Switch to Workspace 5"
+        case .switchWorkspace6:
+            key = "pro.switchWorkspace6.title"; value = "Switch to Workspace 6"
+        case .switchWorkspace7:
+            key = "pro.switchWorkspace7.title"; value = "Switch to Workspace 7"
+        case .switchWorkspace8:
+            key = "pro.switchWorkspace8.title"; value = "Switch to Workspace 8"
+        case .switchWorkspace9:
+            key = "pro.switchWorkspace9.title"; value = "Switch to Workspace 9"
+        case .moveWindowToWorkspace1:
+            key = "pro.moveToWorkspace1.title"; value = "Move Window to Workspace 1"
+        case .moveWindowToWorkspace2:
+            key = "pro.moveToWorkspace2.title"; value = "Move Window to Workspace 2"
+        case .moveWindowToWorkspace3:
+            key = "pro.moveToWorkspace3.title"; value = "Move Window to Workspace 3"
+        case .moveWindowToWorkspace4:
+            key = "pro.moveToWorkspace4.title"; value = "Move Window to Workspace 4"
+        case .moveWindowToWorkspace5:
+            key = "pro.moveToWorkspace5.title"; value = "Move Window to Workspace 5"
+        case .moveWindowToWorkspace6:
+            key = "pro.moveToWorkspace6.title"; value = "Move Window to Workspace 6"
+        case .moveWindowToWorkspace7:
+            key = "pro.moveToWorkspace7.title"; value = "Move Window to Workspace 7"
+        case .moveWindowToWorkspace8:
+            key = "pro.moveToWorkspace8.title"; value = "Move Window to Workspace 8"
+        case .moveWindowToWorkspace9:
+            key = "pro.moveToWorkspace9.title"; value = "Move Window to Workspace 9"
         }
 
         return NSLocalizedString(key, tableName: "Main", value: value, comment: "")
@@ -431,10 +571,25 @@ enum WindowAction: Int, Codable {
             // Corner thirds
             .topLeftThird, .topRightThird, .bottomLeftThird, .bottomRightThird,
             // Eighths
-            .topLeftEighth, .topCenterLeftEighth, .topCenterRightEighth, .topRightEighth, .bottomLeftEighth, .bottomCenterLeftEighth, .bottomCenterRightEighth, .bottomRightEighth:
+            .topLeftEighth, .topCenterLeftEighth, .topCenterRightEighth, .topRightEighth, .bottomLeftEighth, .bottomCenterLeftEighth, .bottomCenterRightEighth, .bottomRightEighth,
+            // Pro non-drag features
+            .nextSpace, .previousSpace,
+            .moveAllToNextDisplay, .moveAllToPreviousDisplay,
+            .saveArrangement, .restoreArrangement,
+            .customSize1, .customSize2, .customSize3, .customSize4, .customSize5:
             return false
         default:
             return true
+        }
+    }
+
+    var proDefault: Shortcut? {
+        switch self {
+        case .nextSpace: return Shortcut(ctrl|alt|cmd|shift, kVK_RightArrow)
+        case .previousSpace: return Shortcut(ctrl|alt|cmd|shift, kVK_LeftArrow)
+        case .moveAllToNextDisplay: return Shortcut(ctrl|alt|cmd|shift, kVK_ANSI_N)
+        case .moveAllToPreviousDisplay: return Shortcut(ctrl|alt|cmd|shift, kVK_ANSI_P)
+        default: return nil
         }
     }
 
@@ -583,6 +738,19 @@ enum WindowAction: Int, Codable {
         case .bottomVerticalThird: return NSImage(imageLiteralResourceName: "bottomThirdTemplate")
         case .topVerticalTwoThirds: return NSImage(imageLiteralResourceName: "topTwoThirdsTemplate")
         case .bottomVerticalTwoThirds: return NSImage(imageLiteralResourceName: "bottomTwoThirdsTemplate")
+        // Pro features
+        case .nextSpace, .previousSpace,
+             .moveAllToNextDisplay, .moveAllToPreviousDisplay,
+             .saveArrangement, .restoreArrangement,
+             .customSize1, .customSize2, .customSize3, .customSize4, .customSize5,
+             .customSnap1, .customSnap2, .customSnap3, .customSnap4, .customSnap5,
+             .switchWorkspace1, .switchWorkspace2, .switchWorkspace3,
+             .switchWorkspace4, .switchWorkspace5, .switchWorkspace6,
+             .switchWorkspace7, .switchWorkspace8, .switchWorkspace9,
+             .moveWindowToWorkspace1, .moveWindowToWorkspace2, .moveWindowToWorkspace3,
+             .moveWindowToWorkspace4, .moveWindowToWorkspace5, .moveWindowToWorkspace6,
+             .moveWindowToWorkspace7, .moveWindowToWorkspace8, .moveWindowToWorkspace9:
+            return NSImage()
         }
     }
 
@@ -628,9 +796,24 @@ enum WindowAction: Int, Codable {
             return Defaults.applyGapsToMaximizeHeight.userDisabled ? .none : .vertical;
         case .almostMaximize, .previousDisplay, .nextDisplay, .larger, .smaller, .largerWidth, .smallerWidth, .largerHeight, .smallerHeight, .center, .centerProminently, .restore, .specified, .reverseAll, .tileAll, .cascadeAll, .cascadeActiveApp, .tileActiveApp:
             return .none
+        // Pro features
+        case .customSize1, .customSize2, .customSize3, .customSize4, .customSize5:
+            return .both
+        case .customSnap1, .customSnap2, .customSnap3, .customSnap4, .customSnap5:
+            return .both
+        case .nextSpace, .previousSpace,
+             .moveAllToNextDisplay, .moveAllToPreviousDisplay,
+             .saveArrangement, .restoreArrangement,
+             .switchWorkspace1, .switchWorkspace2, .switchWorkspace3,
+             .switchWorkspace4, .switchWorkspace5, .switchWorkspace6,
+             .switchWorkspace7, .switchWorkspace8, .switchWorkspace9,
+             .moveWindowToWorkspace1, .moveWindowToWorkspace2, .moveWindowToWorkspace3,
+             .moveWindowToWorkspace4, .moveWindowToWorkspace5, .moveWindowToWorkspace6,
+             .moveWindowToWorkspace7, .moveWindowToWorkspace8, .moveWindowToWorkspace9:
+            return .none
         }
     }
-    
+
     var category: WindowActionCategory? { // used to specify a submenu
         switch self {
         case .firstFourth, .secondFourth, .thirdFourth, .lastFourth, .firstThreeFourths, .centerThreeFourths, .lastThreeFourths: return .fourths
