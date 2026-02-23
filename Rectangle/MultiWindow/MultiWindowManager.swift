@@ -52,6 +52,26 @@ class MultiWindowManager {
                 SpaceManager.moveWindow(windowId: windowId, direction: -1)
             }
             return true
+        // Workspace: switch
+        case .switchWorkspace1, .switchWorkspace2, .switchWorkspace3,
+             .switchWorkspace4, .switchWorkspace5, .switchWorkspace6,
+             .switchWorkspace7, .switchWorkspace8, .switchWorkspace9:
+            let index = parameters.action.rawValue - WindowAction.switchWorkspace1.rawValue
+            if let ws = WorkspaceManager.shared.workspace(at: index) {
+                WorkspaceManager.shared.switchTo(workspaceId: ws.id)
+            }
+            return true
+        // Workspace: move focused window
+        case .moveWindowToWorkspace1, .moveWindowToWorkspace2, .moveWindowToWorkspace3,
+             .moveWindowToWorkspace4, .moveWindowToWorkspace5, .moveWindowToWorkspace6,
+             .moveWindowToWorkspace7, .moveWindowToWorkspace8, .moveWindowToWorkspace9:
+            let index = parameters.action.rawValue - WindowAction.moveWindowToWorkspace1.rawValue
+            if let ws = WorkspaceManager.shared.workspace(at: index),
+               let windowElement = parameters.windowElement ?? AccessibilityElement.getFrontWindowElement(),
+               let windowId = parameters.windowId ?? windowElement.getWindowId() {
+                WorkspaceManager.shared.moveWindow(windowId: windowId, to: ws.id)
+            }
+            return true
         default:
             return false
         }

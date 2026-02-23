@@ -72,6 +72,14 @@ class ProFeaturesViewController: NSViewController {
 
         content.addArrangedSubview(sectionHeader("Menu Customization"))
         content.addArrangedSubview(makeMenuCustomizationView())
+        content.addArrangedSubview(makeDivider())
+
+        content.addArrangedSubview(sectionHeader("Workspaces"))
+        content.addArrangedSubview(makeWorkspacesView())
+        content.addArrangedSubview(makeDivider())
+
+        content.addArrangedSubview(sectionHeader("Window Rules"))
+        content.addArrangedSubview(makeWindowRulesView())
 
         outerScroll.documentView = content
 
@@ -238,6 +246,77 @@ class ProFeaturesViewController: NSViewController {
     @objc private func toggleMenuAction(_ sender: NSButton) {
         guard let action = WindowAction(rawValue: sender.tag) else { return }
         MenuCustomizationManager.setHidden(sender.state == .off, for: action)
+    }
+
+    // MARK: - Workspaces section
+
+    private func makeWorkspacesView() -> NSView {
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 6
+
+        stack.addArrangedSubview(hintLabel(
+            "Use shortcuts (configured in the Shortcuts tab) to switch workspaces. " +
+            "Windows in inactive workspaces are moved off-screen. " +
+            "Edit workspace names below."
+        ))
+
+        let wm = WorkspaceManager.shared
+        for i in 0..<min(wm.workspaceCount, 9) {
+            guard let ws = wm.workspace(at: i) else { continue }
+            let row = NSStackView()
+            row.orientation = .horizontal
+            row.spacing = 8
+
+            let label = NSTextField(labelWithString: "Workspace \(i + 1):")
+            label.setContentHuggingPriority(.required, for: .horizontal)
+
+            let field = NSTextField()
+            field.stringValue = ws.name
+            field.tag = i
+            field.target = self
+            field.action = #selector(renameWorkspace(_:))
+            field.widthAnchor.constraint(equalToConstant: 120).isActive = true
+
+            row.addArrangedSubview(label)
+            row.addArrangedSubview(field)
+            stack.addArrangedSubview(row)
+        }
+
+        return stack
+    }
+
+    @objc private func renameWorkspace(_ sender: NSTextField) {
+        let index = sender.tag
+        guard let ws = WorkspaceManager.shared.workspace(at: index) else { return }
+        WorkspaceManager.shared.renameWorkspace(id: ws.id, to: sender.stringValue)
+    }
+
+    // MARK: - Window Rules section
+
+    private func makeWindowRulesView() -> NSView {
+        let stack = NSStackView()
+        stack.orientation = .vertical
+        stack.alignment = .leading
+        stack.spacing = 6
+
+        stack.addArrangedSubview(hintLabel(
+            "Rules are evaluated when a window is created. " +
+            "First matching rule wins. Bundle ID is required (e.g. com.apple.Safari)."
+        ))
+
+        let rules = Defaults.windowRules.typedValue ?? []
+        if rules.isEmpty {
+            stack.addArrangedSubview(hintLabel("No rules configured yet. (UI editing coming soon — rules can be set via UserDefaults 'windowRules' JSON key.)"))
+        } else {
+            for rule in rules {
+                let desc = "\(rule.appBundleId) → \(rule.action.displayDescription)"
+                stack.addArrangedSubview(hintLabel("• \(desc)"))
+            }
+        }
+
+        return stack
     }
 }
 

@@ -24,6 +24,8 @@ extension Notification.Name {
     static let updateAvailability = Notification.Name("updateAvailability")
     // Pro features
     static let hyperKeyToggled = Notification.Name("hyperKeyToggled")
+    static let workspaceSwitched = Notification.Name("workspaceSwitched")   // object = workspaceId: String
+    static let workspaceRenamed = Notification.Name("workspaceRenamed")     // object = workspaceId: String
 
     func post(
         center: NotificationCenter = NotificationCenter.default,

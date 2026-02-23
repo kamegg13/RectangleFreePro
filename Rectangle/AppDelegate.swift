@@ -33,7 +33,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var snappingManager: SnappingManager!
     private var titleBarManager: TitleBarManager!
     private let hyperKeyManager = HyperKeyManager()
-    
+    /// Optional secondary status item showing the active workspace name (e.g. "[1]")
+    private var workspaceStatusItem: NSStatusItem?
+
     private var prefsWindowController: NSWindowController?
     
     private var prevActiveAppObservation: NSKeyValueObservation?
@@ -48,6 +50,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     static var instance: AppDelegate {
         NSApp.delegate as! AppDelegate
+    }
+
+    static var windowManager: WindowManager {
+        instance.windowManager
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -149,6 +155,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.hyperKeyManager.disable()
             }
         }
+        // Pro: initialize Workspaces
+        WorkspaceManager.shared.initialize()
+        WindowObserver.shared.startObserving()
+        // Update workspace indicator when switching
+        Notification.Name.workspaceSwitched.onPost { [weak self] notification in
+            guard let id = notification.object as? String else { return }
+            self?.updateWorkspaceStatusItem(workspaceId: id)
+        }
+        updateWorkspaceStatusItem(workspaceId: WorkspaceManager.shared.activeWorkspaceId)
         checkForProblematicApps()
         MacTilingDefaults.checkForBuiltInTiling(skipIfAlreadyNotified: true)
     }
@@ -446,6 +461,17 @@ extension AppDelegate: NSMenuDelegate {
     @objc func openMenuCustomization() {
         // Opens preferences to the menu customization section
         openPreferences(self)
+    }
+
+    // MARK: - Workspace status indicator
+
+    func updateWorkspaceStatusItem(workspaceId: String) {
+        guard let ws = WorkspaceManager.shared.workspace(withId: workspaceId) else { return }
+        if workspaceStatusItem == nil {
+            workspaceStatusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        }
+        workspaceStatusItem?.button?.title = "[\(ws.name)]"
+        workspaceStatusItem?.button?.toolTip = "Workspace: \(ws.name)"
     }
 
     struct CategoryMenu {
